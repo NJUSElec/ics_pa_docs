@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "gitbook-plugin-back-to-top-button": "^0.1.4",
+    "gitbook-plugin-callouts": "^0.1.1",
+    "gitbook-plugin-callouts-neo": "file:gitbook-plugin-callouts-neo",
+    "gitbook-plugin-hide-element": "^0.0.4",
+    "gitbook-plugin-intopic-toc": "^1.1.1",
+    "gitbook-plugin-theme-neopa": "file:gitbook-plugin-theme-neopa"
+  },
+  "devDependencies": {
+    "gitbook": "^3.2.3"
+  }
+}

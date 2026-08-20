@@ -1,0 +1,13 @@
+{
+  "name": "gitbook-plugin-callouts-neo",
+  "description": "Transform annoted quotes to callouts in GitBook",
+  "main": "index.js",
+  "version": "0.1.1",
+  "engines": {
+    "gitbook": "3.*"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "cheerio": "^0.19.0"
+  }
+}

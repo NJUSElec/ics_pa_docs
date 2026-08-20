@@ -1,0 +1,77 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  INTERNAL_UPLOAD_URL: "http://172.29.7.136:8080/webhook/upload_book"
+  GITHUB_PAGES_BRANCH: "gh-pages"
+
+build_book:
+  image: node:10
+  stage: build
+  before_script:
+    - npm install -g gitbook-cli
+    - gitbook fetch 3.2.3
+    - npm config set registry https://repo.nju.edu.cn/repository/npm/
+    - npm i --no-audit
+    - sed -i -r 's/<h3>/<h5>/' node_modules/gitbook-plugin-callouts/index.js
+  script:
+    - gitbook build .
+    - test -s _book/index.html
+  artifacts:
+    paths:
+      - _book
+    expire_in: 1 day
+  only:
+    - master
+    - main
+
+deploy_internal:
+  image: debian:latest
+  stage: deploy
+  before_script:
+    - apt-get update -y
+    - apt-get install -y curl zip
+  script:
+    - zip -qr artifacts.zip _book/
+    - 'curl --fail --show-error --silent -X POST -H "X-Upload-Token: ${INTERNAL_UPLOAD_TOKEN}" -F "file=@artifacts.zip" "${INTERNAL_UPLOAD_URL}"'
+  needs:
+    - job: build_book
+      artifacts: true
+  only:
+    - master
+    - main
+
+deploy_github_pages:
+  image: alpine:3.20
+  stage: deploy
+  resource_group: gitbook-pages
+  before_script:
+    - apk add --no-cache git
+    - git config --global user.name "gitlab-ci"
+    - git config --global user.email "gitlab-ci@users.noreply.github.com"
+  script:
+    - test -s _book/index.html
+    - git clone "https://x-access-token:${GITHUB_PAGES_TOKEN}@github.com/${GITHUB_PAGES_REPO}.git" github-pages
+    - cd github-pages
+    - git fetch origin "${GITHUB_PAGES_BRANCH}" || true
+    - |
+      if git show-ref --verify --quiet "refs/remotes/origin/${GITHUB_PAGES_BRANCH}"; then
+        git checkout -B "${GITHUB_PAGES_BRANCH}" "origin/${GITHUB_PAGES_BRANCH}"
+      else
+        git checkout --orphan "${GITHUB_PAGES_BRANCH}"
+        git rm -rf . || true
+      fi
+    - git rm -r --ignore-unmatch .
+    - cp -a ../_book/. .
+    - touch .nojekyll
+    - printf '%s\n' "${CI_COMMIT_SHA}" > SOURCE_COMMIT
+    - git add -A
+    - git diff --cached --quiet || git commit -m "Deploy ${CI_COMMIT_SHA} from GitLab"
+    - git push origin "HEAD:${GITHUB_PAGES_BRANCH}"
+  needs:
+    - job: build_book
+      artifacts: true
+  only:
+    - master
+    - main

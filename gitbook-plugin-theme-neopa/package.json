@@ -1,0 +1,12 @@
+{
+  "name": "gitbook-plugin-theme-neopa",
+  "version": "1.0.0",
+  "description": "Gitbook Teme for NeoICSPA",
+  "license": "ISC",
+  "author": "",
+  "main": "index.js",
+  "scripts": { },
+  "engines": {
+    "gitbook": "*"
+  }
+}

@@ -1,0 +1,6 @@
+/* 最小主题覆盖：仅对齐 icspa 主色，其余沿用 GitBook 默认 */
+.gitbook-link { display: none !important; }
+
+.markdown-section a {
+    color: #2563eb !important;
+}
