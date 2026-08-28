@@ -21,6 +21,13 @@
   padding-left: 32px !important;
 }
 
+/* 取消左右翻页按钮：默认主题把它们绝对定位悬浮在内容两侧(min-width:90px)，
+   内容全宽时会遮住最左/最右列导致无法左键选中，故直接隐藏 */
+.navigation.navigation-prev,
+.navigation.navigation-next {
+  display: none !important;
+}
+
 .intopic-toc{
 	margin: unset !important;
 }
