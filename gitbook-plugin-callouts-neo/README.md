@@ -80,7 +80,7 @@ Examples of each alert type (both "White" and "Night" modes supported) are:
 
 ![Examples](examples.png)
 
-Refer to [Font Awesome doc](http://fortawesome.github.io/Font-Awesome/icons/) for picto value.
+Refer to [Font Awesome doc](https://fontawesome.com/v4/icons/) for picto value.
 
 ##### Show type in header
 
